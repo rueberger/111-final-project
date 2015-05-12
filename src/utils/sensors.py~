@@ -1,0 +1,45 @@
+from dac import set_voltage
+from adc import read_adc, read_adc_avg
+from time import sleep, time
+
+class Sensors(object):
+
+    def __init__(self):
+        """
+        might want to put a dialog for calibrating here
+        """
+        # bugs for first timestep but whatever
+        self.last_pos = 0
+        self.last_time = 0
+
+    def calibrate_top(self):
+        print "Hold apparatus at top. Calibrating in 3 seconds"
+        sleep(3)
+        print "Calibrating now"
+        measured = read_adc_avg(itrs=100)
+        print "Calibration finished"
+        self.top_cal = measured
+
+    def calibrate_bottom(self):
+        print "Hold apparatus at bottom. Calibrating in 3 seconds"
+        sleep(3)
+        print "Calibrating now"
+        measured = read_adc_avg(itrs=100)
+        print "Calibration finished"
+        self.bot_cal = measured
+
+    def measure_pos(self):
+        """
+        unitless conversion
+        return value between 0 and 1
+        """
+        # may want to do an average
+        pos = (read_adc() - self.bot_cal) / self.top_cal
+        return pos, time()
+
+    def measure(self):
+        """
+        returns curr_pos, velocity
+        """
+        curr_pos, curr_time = self.measure_pos()
+        velocity = (curr_pos - self.last_pos) / (curr_time - self.last_time)

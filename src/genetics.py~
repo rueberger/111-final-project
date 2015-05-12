@@ -1,0 +1,25 @@
+from pid import pid_loop
+import numpy as np
+
+class Breeder(object):
+
+    def __init__(self):
+        # hyperparameters
+        self.T_0 = 10
+        self.pop_size = 10
+        self.num_to_breed = 4
+        # used when initializing population
+        self.param_upper_bound = 10
+        self.param_lower_bound = -10
+        # idk about this
+        self.curr_T = self.T_0 * np.exp(- self.curr_gen * .2)
+        # class variables
+        self.curr_gen = 0
+        self.population = self.init_pop()
+        self.fitness = np.zeros(self.pop_size)
+
+    def init_pop(self):
+        pop = []
+
+    # method to evaluate fitness functions
+    # method to breed
